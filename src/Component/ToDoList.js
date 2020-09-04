@@ -1,5 +1,5 @@
 import React ,{Component}from 'react';
-import {Modal,ModalBody,ModalHeader, Button, Form, FormGroup, Label, Input, Col} from 'reactstrap'
+import {Modal,ModalBody,ModalHeader, Button, Form, FormGroup,FormFeedback, Label, Input, Col} from 'reactstrap'
 import { data } from '../shared/dummyData';
 import Switch from "react-switch";
 
@@ -17,7 +17,12 @@ class Todo extends Component{
       work:"",
       date:"",
       time:""
-      }
+      },
+      touched: {
+        work: false,
+        date: false,
+        time: false
+    }
 
     }
     this.handleChange = this.handleChange.bind(this);
@@ -34,6 +39,8 @@ class Todo extends Component{
       isToDo: !this.state.isToDo
   })
   }
+
+
   handleInputChange= e =>{
     
     this.setState({
@@ -48,9 +55,12 @@ class Todo extends Component{
   }
   handleSubmit = e =>{
    
-  
+  if(this.state.currentItem.work !== "" && this.state.currentItem.date !== ""  && this.state.currentItem.time  !== "" ){
     this.onAdd(this.state.currentItem)
     this.toggleModal()
+  }else{
+    document.getElementById("requiredMessege").innerHTML = "Every field should be filled up !"
+  }
     e.preventDefault()
    
   }
@@ -64,6 +74,7 @@ class Todo extends Component{
    console.log(this.state.selectedIndex)
   
    if( this.state.selectedIndex === -1){
+     
       let list = this.returnList()
       list.push(data)
       localStorage.setItem('works',JSON.stringify(list))
@@ -127,6 +138,8 @@ Update=()=>{
  
   render(){
     const show=this.state.isToDo?this.state.listItems : data
+   
+   
     
   return (
     
@@ -158,9 +171,9 @@ Update=()=>{
       </label>
       
        {/* -----------------------------------HeadLine & Add Button-----------------------------------  */}
-        {this.state.isToDo ? <div className="row mb-10"><h1 className="col-5 col-sm-8"> to-do-list</h1><button className=" btn btn-primary  rounded-circle ml-auto" onClick={this.toggleModal}><i className="fa fa-plus  fa-lg"  ></i></button></div> : <h1> Data Table</h1>}
+        {this.state.isToDo ? <div className="row justify-content-center"><h1 className="col-5 col-sm-8 "> To do list</h1><button className=" btn btn-primary  ml-auto" onClick={this.toggleModal}><i className="fa fa-plus  fa-lg"  ></i> Create New</button></div> : <h1> Data Table</h1>}
         {/* -----------------------------------Table-----------------------------------  */}
-        <div className="table-responsive">
+        <div className="table-responsive mt-10">
         <table className="table table-striped">
           <thead>
           <tr>
@@ -202,7 +215,11 @@ Update=()=>{
                                     <Input type="text" id="work" name="work"
                                         placeholder="Task"
                                         value={this.state.currentItem.work}
-                                        onChange={this.handleInputChange} />
+                                        
+                                        onChange={this.handleInputChange} 
+                                      
+                                        />
+                                       
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
@@ -211,7 +228,9 @@ Update=()=>{
                                     <Input type="date" id="date" name="date"
                                         placeholder="Date"
                                         value={this.state.currentItem.date}
+                                       
                                         onChange={this.handleInputChange} />
+                                        
                                 </Col>                        
                             </FormGroup>
                             <FormGroup row>
@@ -220,13 +239,18 @@ Update=()=>{
                                     <Input type="time" id="time" name="time"
                                         placeholder="Time"
                                         value={this.state.currentItem.time}
-                                        onChange={this.handleInputChange} />
+                                       
+                              
+                                        onChange={this.handleInputChange} 
+                                        />
+                                       
                                 </Col>
                             </FormGroup>
                             
                             
                             <FormGroup row>
-                                <Col md={{size: 10, offset: 2}}>
+                              <p className="col offset-4 " style={{color: "red"}} id="requiredMessege"></p>
+                                <Col md={{size: 10, offset: 4}}>
                                     <Button type="submit" color="primary">
                                         Add
                                     </Button>
