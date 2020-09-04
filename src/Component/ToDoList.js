@@ -147,10 +147,30 @@ Update=()=>{
        
      {/* -----------------------------------toggleButton-----------------------------------  */}
       <label>
-      <span className="fa fa-list-alt fa-2x ">&nbsp; </span>
+  {this.state.isToDo ? <span style={{color:"white"}}>Click the button to view data table &nbsp; </span> : <span style={{color:"white"}}>Click the button to view to-do list &nbsp; </span> }
       <Switch
             onChange={this.handleChange}
             checked={this.state.isToDo}
+            offColor="#972D07"
+            onColor="#D8973C"
+            offHandleColor="#D8973C"
+            onHandleColor="#972D07"
+            checkedIcon={
+              <div className="rounded-pill "
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "100%",
+                  width:"100%",
+                  fontSize: 10,
+                  color: "white",
+                   paddingRight: 2
+                }}
+              >
+               Task
+              </div>
+            }
             uncheckedIcon={
               <div className="rounded-pill"
                 style={{
@@ -171,10 +191,18 @@ Update=()=>{
       </label>
       
        {/* -----------------------------------HeadLine & Add Button-----------------------------------  */}
-        {this.state.isToDo ? <div className="row justify-content-center"><h1 className="col-5 col-sm-8 "> To do list</h1><button className=" btn btn-primary  ml-auto" onClick={this.toggleModal}><i className="fa fa-plus  fa-lg"  ></i> Create New</button></div> : <h1> Data Table</h1>}
+        {this.state.isToDo ? 
+          <div className="row ">
+            <h1 className="mx-10 "style={{color: "white"}}> To do list</h1>
+            <button className=" btn-sm btn-primary  ml-auto mr-10" onClick={this.toggleModal}>
+              <i className="fa fa-plus  fa-lg"  ></i> Create New</button>
+               
+          </div>
+          : 
+          <h1 style={{color: "white"}}> Data Table</h1>}
         {/* -----------------------------------Table-----------------------------------  */}
-        <div className="table-responsive mt-10">
-        <table className="table table-striped">
+        <div className="table-responsive" id="table">
+        <table className="table table-striped table-dark hover">
           <thead>
           <tr>
             <th scope="col">Task</th>
