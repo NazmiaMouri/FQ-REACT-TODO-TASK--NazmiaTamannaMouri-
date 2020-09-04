@@ -10,8 +10,8 @@ class Todo extends Component{
     this.state = {
       isToDo:true,
     
-      currentIndex:-1,
-     listItems:this.returnList(),
+      selectedIndex:-1,
+      listItems:this.returnList(),
      
       currentItem:{ 
       work:"",
@@ -35,9 +35,7 @@ class Todo extends Component{
   })
   }
   handleInputChange= e =>{
-   const name=e.target.name
-    const value=e.target.value
-    console.log(name,value)
+    
     this.setState({
       currentItem:{
         work:e.target.name === "work" ? e.target.value : this.state.currentItem.work,
@@ -46,15 +44,14 @@ class Todo extends Component{
       }
     
     })
-    console.log(this.state.currentItem)
+   
   }
   handleSubmit = e =>{
    
-   console.log(e)
-   console.log("Before passing to add or update " + this.state.currentItem)
+  
     this.onAdd(this.state.currentItem)
     this.toggleModal()
-   e.preventDefault()
+    e.preventDefault()
    
   }
  returnList=() => {
@@ -63,20 +60,26 @@ class Todo extends Component{
       
     return JSON.parse(localStorage.getItem('works'))
  }
- onAdd =(data)=>{
-   console.log("inside add"+data)
-   var list = this.returnList()
-   list.push(data)
-   localStorage.setItem('works',JSON.stringify(list))
-   this.setState({
-     listItems:list,
-     currentItem:{
-     work:"",
-     date:"",
-     time:""
-    }
+ onAdd=(data)=>{
+   console.log(this.state.selectedIndex)
+  
+   if( this.state.selectedIndex === -1){
+      let list = this.returnList()
+      list.push(data)
+      localStorage.setItem('works',JSON.stringify(list))
+      this.setState({
+        listItems:list,
+        currentItem:{
+        work:"",
+        date:"",
+        time:""
+        }
 
-   })  
+      })  
+    }else if( this.state.selectedIndex !== -1){
+      this.Update()
+    }
+    
    
  }
  handleDelete = (index) => {
@@ -85,24 +88,48 @@ class Todo extends Component{
   localStorage.setItem('works', JSON.stringify(list))
   this.setState( { listItems:list})
 }
- handleEdit = index =>{
-   
-  //  this.setState({
-  //    work:this.state[index].work,
-  //    time:this.state[index].time,
-  //    date:this.state[index].date
-  //  })
-   console.log(this.state)
-  // this.toggleModal()
-
+ handleEdit = (index) =>{
+  var retrieve = this.state.listItems[index]
+   this.setState({
+     selectedIndex:index,
+     currentItem:{
+      work:retrieve.work,
+      date:retrieve.date,
+      time:retrieve.time
+     } 
+   })
+   this.toggleModal()
+ 
  }
 
+Update=()=>{
+  
+    let listToUpdate = this.returnList()
+   // listToUpdate.splice(this.state.selectedIndex,0,this.state.currentItem)
+    listToUpdate[this.state.selectedIndex].work=this.state.currentItem.work
+    listToUpdate[this.state.selectedIndex].date=this.state.currentItem.date
+    listToUpdate[this.state.selectedIndex].time=this.state.currentItem.time
+    console.log( listToUpdate)
+    localStorage.setItem('works', JSON.stringify(listToUpdate))
+    this.setState( { 
+      listItems:listToUpdate,
+      selectedIndex:-1,
+      currentItem:{
+        work:"",
+        date:"",
+        time:""
+        }
+    })
+  
+  
 
- //returnStateObject
+}
+ 
   render(){
   return (
     
       <div className='container'>
+       
      {/* -----------------------------------toggleButton-----------------------------------  */}
       <label>
       <span className="fa fa-list-alt fa-2x ">&nbsp; </span>
