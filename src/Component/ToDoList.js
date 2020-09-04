@@ -1,6 +1,6 @@
 import React ,{Component}from 'react';
 import {Modal,ModalBody,ModalHeader, Button, Form, FormGroup, Label, Input, Col} from 'reactstrap'
-//import { list } from '../shared/list';
+import { data } from '../shared/dummyData';
 import Switch from "react-switch";
 
 
@@ -126,6 +126,8 @@ Update=()=>{
 }
  
   render(){
+    const show=this.state.isToDo?this.state.listItems : data
+    
   return (
     
       <div className='container'>
@@ -162,19 +164,19 @@ Update=()=>{
         <table className="table table-striped">
           <thead>
           <tr>
-            <th scope="col">Work</th>
+            <th scope="col">Task</th>
             <th scope="col">Date</th>
             <th scope="col">Time</th>
             {this.state.isToDo && <th  scope="col">Update/Delete</th> }
           </tr>
           </thead>
           <tbody>
-            {
-              this.state.listItems.map((item,index)=>{
+            { 
+              show.map((item,index)=>{
               return <tr key={index}>
-              {this.state.isToDo ?<td>{item.work}</td> : <td></td>}
-              {this.state.isToDo ?<td>{item.date}</td> : <td></td>}
-              {this.state.isToDo ?<td>{item.time}</td> : <td></td>}
+              <td>{item.work}</td> 
+              <td>{item.date}</td> 
+              <td>{item.time}</td> 
               {this.state.isToDo && <td>
                 <button className='btn btn-warning' onClick={()=>this.handleEdit(index)}><i className=" fa fa-pencil "></i></button>
                 &nbsp;
@@ -198,7 +200,7 @@ Update=()=>{
                                 <Label htmlFor="work" md={4}>Work to do</Label>
                                 <Col md={8}>
                                     <Input type="text" id="work" name="work"
-                                        placeholder="work"
+                                        placeholder="Task"
                                         value={this.state.currentItem.work}
                                         onChange={this.handleInputChange} />
                                 </Col>
@@ -207,7 +209,7 @@ Update=()=>{
                                 <Label htmlFor="date" md={4}>Date</Label>
                                 <Col md={8}>
                                     <Input type="date" id="date" name="date"
-                                        placeholder="date"
+                                        placeholder="Date"
                                         value={this.state.currentItem.date}
                                         onChange={this.handleInputChange} />
                                 </Col>                        
